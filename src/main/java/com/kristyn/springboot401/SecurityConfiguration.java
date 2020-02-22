@@ -17,9 +17,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public static BCryptPasswordEncoder passwordEncoder(){
-
         return new BCryptPasswordEncoder();
     }
+
     @Autowired
     private SSUserDetailsService userDetailsService;
 
@@ -34,13 +34,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http
-                .authorizeRequests().antMatchers("/", "/h2-console/**").permitAll()
-                .antMatchers("/admin")
-                .access("hasAnyAuthority('ADMIN')")
+                .authorizeRequests()
+                .antMatchers("/", "/h2-console/**").permitAll()
+                .antMatchers("/admin").access("hasAnyAuthority('ADMIN')")
                 .anyRequest().authenticated()
                 .and().formLogin().loginPage("/login").permitAll()
                 .and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutRequestMatcher( new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login").permitAll().permitAll()
                 .and()
                 .httpBasic();
